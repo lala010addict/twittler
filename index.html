@@ -1,27 +1,114 @@
-<!DOCTYPE html>
 <html>
-  <head>
+
+<head>
+    <title>Twittler</title>
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
-  </head>
-  <body>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation"><a href="mailto:jipeng@syr.edu">Contact</a></li>
+                </ul>
+            </nav>
+            <h3 class="text-muted">Twittler</h3>
+        </div>
+        <div class="jumbotron">
+            <div class="form-group">
+                <textarea class="form-control" placeholder="What's happening?" rows="4" id="comment"></textarea>
+            </div>
+            <br>
+            <p><a class="btn btn-lg btn-success" href="" role="button">Not working yet!</a></p>
+        </div>
+        <div class="row marketing" id="tweetsbody">
+            <div class="col-lg-3">
+                <h4>Users</h4>
+                <p>@<a class="userName">mracus</a></p>
+                <br>
+                <p>@<a class="userName">shawndrost</a></p>
+                <br>
+                <p>@<a class="userName">sharksforcheap</a></p>
+                <br>
+                <p>@<a class="userName">douglascalhoun</a></p>
+                </span>
+            </div>
+            <div class="col-lg-9">
+                <h4 id="refresh"> <p><a class="btn btn-lg btn-success" href="#tweetsbody" role="button" >Lastest Tweets</a></p></h4>
+                <p id="tweets"></p>
+            </div>
+        </div>
+        <footer class="footer">
+            <p>&copy; JieYing Peng 2015</p>
+        </footer>
+    </div>
+    <!-- /container -->
     <script>
+    $(document).ready(function() {
 
-      $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
+        var ToDisplayTweets = function() {
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
+            var $body = $('#tweets');
+            $body.html('');
+
+            var index = streams.home.length - 1;
+            while (index >= 0) {
+                var tweet = streams.home[index];
+                var $tweet = $('<div></div>');
+                $tweet.text('@' + tweet.user + ': ' + tweet.message + " " + tweet.created_at);
+                $tweet.appendTo($body);
+                index -= 1;
+            }
         }
 
-      });
 
+        //show tweets
+
+        ToDisplayTweets()
+
+        //click to refresh tweets
+
+        $("#refresh").on('click', function() {
+
+            ToDisplayTweets()
+
+        })
+
+        //shows individual user tweets
+
+        var toDisplayUser = function(user) {
+
+            var $body = $('#tweets');
+            $body.html('');
+
+            var index = streams.users[user].length - 1;
+            while (index >= 0) {
+                var tweet = streams.users[user][index];
+                var $tweet = $('<div></div>');
+                $tweet.text('@' + tweet.user + ': ' + tweet.message + " " + tweet.created_at);
+                $tweet.appendTo($body);
+                index -= 1;
+            }
+
+
+        };
+
+        //click on name to show individual user tweets
+
+        $('.userName').on('click', function() {
+
+            var user = $(this).text()
+
+            toDisplayUser(user)
+
+        })
+
+    });
     </script>
-  </body>
+</body>
+
 </html>
